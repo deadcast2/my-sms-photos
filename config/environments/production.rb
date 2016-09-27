@@ -87,6 +87,7 @@ Rails.application.configure do
   config.paperclip_defaults = {
     storage: :s3,
     s3_storage_class: :REDUCED_REDUNDANCY,
+    url: ':s3_domain_url',
     s3_credentials: {
       bucket: ENV.fetch('S3_BUCKET_NAME'),
       access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID'),
