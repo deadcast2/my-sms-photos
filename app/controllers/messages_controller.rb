@@ -11,7 +11,7 @@ class MessagesController < ApplicationController
       })
     end
     
-    Twilio::REST::Client.new.message.create({
+    Twilio::REST::Client.new.messages.create({
       from: params['To'],
       to: params['From'],
       body: 'Hello!'
