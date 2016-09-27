@@ -1,6 +1,7 @@
 class MessagesController < ApplicationController
+  protect_from_forgery except: :create
+  
   def create
-    puts '@' * 100
     puts params
   end
 end
