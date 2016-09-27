@@ -2,7 +2,7 @@ class MessagesController < ApplicationController
   protect_from_forgery except: :create
   
   def create
-    phone = Phone.create_or_find_by_number(params['From'])
+    phone = Phone.find_or_create_by(number: params['From'])
     params['NumMedia'].to_i.times do |index|
       phone.photos.create({
         photo_remote_url: params["MediaUrl#{index}"],
