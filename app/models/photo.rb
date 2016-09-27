@@ -7,6 +7,6 @@ class Photo < ApplicationRecord
     { content_type: ['image/jpeg'] }
     
   def photo_remote_url= url
-    self.photo = URI.parse url
+    self.photo = open(url, allow_redirections: :all)
   end
 end
