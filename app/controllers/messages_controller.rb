@@ -6,7 +6,7 @@ class MessagesController < ApplicationController
     phone = Phone.find_or_create_by(number: params['From'])
     params['NumMedia'].to_i.times do |index|
       phone.photos.create({
-        photo_remote_url: params["MediaUrl#{index}"],
+        photo_remote_url: params["MediaUrl#{index}"].sub('https', 'http'),
         body: params['Body']
       })
     end
