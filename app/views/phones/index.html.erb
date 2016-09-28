@@ -1,3 +1,4 @@
 <% @photos.each do |photo| %>
-  <%= image_tag photo.photo.url(:thumb), width: '150', height: '150' %>
+  <%= image_tag photo.photo.url(:thumb), width: '150', height: '150', 
+  alt: photo.body %>
 <% end %>
