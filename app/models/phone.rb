@@ -10,8 +10,7 @@ class Phone < ApplicationRecord
     Twilio::REST::Client.new.messages.create({
       from: '+12096617815',
       to: self.number,
-      body: "Ahoy and welcome to My SMS Photos! You can access your photos 
-      by visting mysms.photos/#{self.number.sub('+1', '')}"
+      body: "Ahoy and welcome to My SMS Photos! You can access your photos by visting mysms.photos/#{self.number.sub('+1', '')}"
     })
   end
   
@@ -19,7 +18,7 @@ class Phone < ApplicationRecord
     Twilio::REST::Client.new.messages.create({
       from: '+12096617815',
       to: self.number,
-      body: 'We got your photos! :)'
+      body: 'We got your photo(s)! :)'
     })
   end
 end
