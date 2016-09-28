@@ -30,6 +30,7 @@ gem 'jbuilder', '~> 2.5'
 # gem 'capistrano-rails', group: :development
 
 gem 'paperclip', '~> 5.0.0'
+gem 'delayed_paperclip'
 gem 'aws-sdk', '~> 2.3.0'
 gem 'twilio-ruby', '~> 4.11.1'
 gem 'open_uri_redirections'
