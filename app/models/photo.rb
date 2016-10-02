@@ -1,7 +1,10 @@
 class Photo < ApplicationRecord
   belongs_to :phone
   
-  has_attached_file :photo, styles: { medium: '300x300>', thumb: '150x150#' }
+  has_attached_file :photo, 
+    processors: [:thumbnail, :paperclip_optimizer],
+    paperclip_optimizer: { jpegrecompress: { quality: 0 } },
+    styles: { thumb: '150x150#' }
   process_in_background :photo
     
   validates_attachment :photo, presence: true, content_type: 

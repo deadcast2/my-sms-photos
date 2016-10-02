@@ -30,6 +30,8 @@ gem 'jbuilder', '~> 2.5'
 # gem 'capistrano-rails', group: :development
 
 gem 'paperclip', '~> 5.0.0'
+gem 'image_optim_bin', group: :production
+gem 'paperclip-optimizer'
 gem 'delayed_paperclip'
 gem 'aws-sdk', '~> 2.3.0'
 gem 'twilio-ruby', '~> 4.11.1'
