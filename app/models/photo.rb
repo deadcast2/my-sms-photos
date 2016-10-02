@@ -3,7 +3,7 @@ class Photo < ApplicationRecord
   
   has_attached_file :photo, 
     processors: [:thumbnail, :paperclip_optimizer],
-    paperclip_optimizer: { jpegrecompress: { quality: 0 } },
+    paperclip_optimizer: { jpegoptim: { allow_lossy: true, max_quality: 0 } },
     styles: { thumb: '150x150#' }
   process_in_background :photo
     
