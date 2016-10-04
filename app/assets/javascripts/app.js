@@ -99,5 +99,20 @@ window.mysms = {};
           break;
       }
     }, false);
+    
+    document.addEventListener('mousedown', function(event){
+      var raycaster = new THREE.Raycaster();
+      var mouse = new THREE.Vector2();
+      
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+      
+      raycaster.setFromCamera(mouse, camera);
+      var intersects = raycaster.intersectObjects(meshes);
+
+      if(intersects.length > 0) {
+        console.log(intersects[0].object.position);
+      }
+    }, false);
   };
 })(window.mysms);
