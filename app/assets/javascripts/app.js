@@ -2,6 +2,13 @@ window.mysms = {};
 
 (function(self){
   self.init = function(){
+    var cameraStartPos = new THREE.Vector3();
+    var cameraStartRot = new THREE.Vector3();
+    var cameraEndPos = new THREE.Vector3();
+    var cameraEndRot = new THREE.Vector3();
+    
+    var cameraAnimating = false;
+    var time = 0;
     var meshes = [];
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(
@@ -40,18 +47,35 @@ window.mysms = {};
     function render() {
     	requestAnimationFrame(render);
       
-      if(moveLeft) camera.rotation.y += 0.05;
-      if(moveRight) camera.rotation.y -= 0.05;
+      if(!cameraAnimating) {
+        if(moveLeft) camera.rotation.y += 0.05;
+        if(moveRight) camera.rotation.y -= 0.05;
       
-      var forward = new THREE.Vector3(0, 0, -1);
-      forward.applyQuaternion(camera.quaternion);
+        var forward = new THREE.Vector3(0, 0, -1);
+        forward.applyQuaternion(camera.quaternion);
       
-      if(moveForward) {
-        camera.position.add(forward.multiplyScalar(0.05));
-      }
+        if(moveForward) {
+          camera.position.add(forward.multiplyScalar(0.05));
+        }
       
-      if(moveBackward) {
-        camera.position.add(forward.multiplyScalar(-0.05));
+        if(moveBackward) {
+          camera.position.add(forward.multiplyScalar(-0.05));
+        }
+      } else {
+        time += 0.01;
+        
+        camera.position.x = (1 - time)*cameraStartPos.x + time*cameraEndPos.x;
+        camera.position.y = (1 - time)*cameraStartPos.y + time*cameraEndPos.y;
+        camera.position.z = (1 - time)*cameraStartPos.z + time*cameraEndPos.z;
+        
+        camera.rotation.x = (1 - time)*cameraStartRot.x + time*cameraEndRot.x;
+        camera.rotation.y = (1 - time)*cameraStartRot.y + time*cameraEndRot.y;
+        camera.rotation.z = (1 - time)*cameraStartRot.z + time*cameraEndRot.z;
+        
+        if(time >= 1) {
+          time = 0;
+          cameraAnimating = false;
+        }
       }
       
     	renderer.render(scene, camera);
@@ -112,16 +136,29 @@ window.mysms = {};
 
       if(intersects.length > 0) {
         console.log(intersects[0]);
-        camera.position.x = intersects[0].object.position.x;
-        camera.position.y = intersects[0].object.position.y;
-        camera.position.z = intersects[0].object.position.z;
-        camera.rotation.x = intersects[0].object.rotation.x;
-        camera.rotation.y = intersects[0].object.rotation.y;
-        camera.rotation.z = intersects[0].object.rotation.z;
+        // start
+        cameraStartPos.x = camera.position.x;
+        cameraStartPos.y = camera.position.y;
+        cameraStartPos.z = camera.position.z;
+        
+        cameraStartRot.x = camera.rotation.x;
+        cameraStartRot.y = camera.rotation.y;
+        cameraStartRot.z = camera.rotation.z;
+        
+        // end
+        cameraEndPos.x = intersects[0].object.position.x;
+        cameraEndPos.y = intersects[0].object.position.y;
+        cameraEndPos.z = intersects[0].object.position.z;
+        
+        cameraEndRot.x = intersects[0].object.rotation.x;
+        cameraEndRot.y = intersects[0].object.rotation.y;
+        cameraEndRot.z = intersects[0].object.rotation.z;
         
         var normalMatrix = new THREE.Matrix3().getNormalMatrix(intersects[0].object.matrixWorld);
         var worldNormal = intersects[0].face.normal.clone().applyMatrix3(normalMatrix).normalize();
-        camera.position.add(worldNormal.multiplyScalar(2));
+        cameraEndPos.add(worldNormal);
+        
+        cameraAnimating = true;
       }
     }, false);
   };
