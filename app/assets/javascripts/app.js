@@ -43,15 +43,15 @@ window.mysms = {};
       if(moveLeft) camera.rotation.y += 0.05;
       if(moveRight) camera.rotation.y -= 0.05;
       
-      var forward = new THREE.Vector3();
-      forward.set(Math.sin(camera.rotation.y), 0, Math.cos(camera.rotation.y));
+      var forward = new THREE.Vector3(0, 0, -1);
+      forward.applyQuaternion(camera.quaternion);
       
       if(moveForward) {
-        camera.position.add(forward.multiplyScalar(-0.05));
+        camera.position.add(forward.multiplyScalar(0.05));
       }
       
       if(moveBackward) {
-        camera.position.add(forward.multiplyScalar(0.05));
+        camera.position.add(forward.multiplyScalar(-0.05));
       }
       
     	renderer.render(scene, camera);
@@ -105,13 +105,23 @@ window.mysms = {};
       var mouse = new THREE.Vector2();
       
       mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
       
       raycaster.setFromCamera(mouse, camera);
       var intersects = raycaster.intersectObjects(meshes);
 
       if(intersects.length > 0) {
-        console.log(intersects[0].object.position);
+        console.log(intersects[0]);
+        camera.position.x = intersects[0].object.position.x;
+        camera.position.y = intersects[0].object.position.y;
+        camera.position.z = intersects[0].object.position.z;
+        camera.rotation.x = intersects[0].object.rotation.x;
+        camera.rotation.y = intersects[0].object.rotation.y;
+        camera.rotation.z = intersects[0].object.rotation.z;
+        
+        var normalMatrix = new THREE.Matrix3().getNormalMatrix(intersects[0].object.matrixWorld);
+        var worldNormal = intersects[0].face.normal.clone().applyMatrix3(normalMatrix).normalize();
+        camera.position.add(worldNormal.multiplyScalar(2));
       }
     }, false);
   };
