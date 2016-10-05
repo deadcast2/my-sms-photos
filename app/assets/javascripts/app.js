@@ -135,7 +135,6 @@ window.mysms = {};
       var intersects = raycaster.intersectObjects(meshes);
 
       if(intersects.length > 0) {
-        console.log(intersects[0]);
         // start
         cameraStartPos.x = camera.position.x;
         cameraStartPos.y = camera.position.y;
@@ -157,6 +156,13 @@ window.mysms = {};
         var normalMatrix = new THREE.Matrix3().getNormalMatrix(intersects[0].object.matrixWorld);
         var worldNormal = intersects[0].face.normal.clone().applyMatrix3(normalMatrix).normalize();
         cameraEndPos.add(worldNormal);
+        
+        var planeDirToCamera = camera.position.clone().sub(intersects[0].object.position);
+        var angle = worldNormal.dot(planeDirToCamera.normalize());
+        
+        if(angle < 0) {
+          console.log("behind pic");
+        }
         
         cameraAnimating = true;
       }
