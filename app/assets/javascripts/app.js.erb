@@ -21,11 +21,16 @@ window.mysms = {};
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
     
+    var tiles = [
+      "<%= asset_path 'tile0.png' %>", "<%= asset_path 'tile1.png' %>",
+      "<%= asset_path 'tile2.png' %>", "<%= asset_path 'tile3.png' %>",
+      "<%= asset_path 'tile4.png' %>", "<%= asset_path 'tile5.png' %>"
+    ];
     var spaceboxMaterials = [];
     for(var i = 0; i < 6; i++) {
       spaceboxMaterials.push(new THREE.MeshBasicMaterial({
         side: THREE.BackSide,
-        map: new THREE.TextureLoader().load('/assets/spacebox/slice' + i + '.png')
+        map: new THREE.TextureLoader().load(tiles[i])
       }));
     }
     var skyMaterial = new THREE.MeshFaceMaterial(spaceboxMaterials);
