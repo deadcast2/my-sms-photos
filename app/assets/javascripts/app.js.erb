@@ -176,5 +176,11 @@ window.mysms = {};
         cameraAnimating = true;
       }
     }, false);
+    
+    window.addEventListener('resize', function() {
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+    }, false);
   };
 })(window.mysms);
