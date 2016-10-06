@@ -39,7 +39,7 @@ window.mysms = {};
   
     var photos = document.querySelectorAll('[data-photo-url]');
     for(var i = 0; i < photos.length; i++) {
-      var geometry = new THREE.PlaneGeometry(1, 1, 1);
+      var geometry = new THREE.CircleGeometry(1, 16);
       var material = new THREE.MeshBasicMaterial({
         side: THREE.DoubleSide,
         map: new THREE.TextureLoader().load(photos[i].getAttribute('data-photo-url'))
@@ -50,22 +50,23 @@ window.mysms = {};
     }
     
     for(var i = 0; i < meshes.length; i++) {
-      meshes[i].position.x = Math.random() * 10 - 5;
-      meshes[i].position.y = Math.random() * 10 - 5;
-      meshes[i].position.z = Math.random() * 10 - 5;
+      meshes[i].position.x = Math.random() * 14 - 7;
+      meshes[i].position.y = Math.random() * 14 - 7;
+      meshes[i].position.z = Math.random() * 14 - 7;
       
       meshes[i].rotation.x += Math.random() * 10 - 5;
       meshes[i].rotation.y += Math.random() * 10 - 5;
+      meshes[i].rotation.z += Math.random() * 10 - 5;
     }
 
-    camera.position.z = 6;
+    camera.position.z = 14;
   
     function render() {
     	requestAnimationFrame(render);
       
       if(!cameraAnimating) {
-        if(moveLeft) camera.rotation.y += 0.05;
-        if(moveRight) camera.rotation.y -= 0.05;
+        if(moveLeft) camera.rotateOnAxis(camera.up, 0.05)
+        if(moveRight) camera.rotateOnAxis(camera.up, -0.05)
       
         var forward = new THREE.Vector3(0, 0, -1);
         forward.applyQuaternion(camera.quaternion);
@@ -171,7 +172,7 @@ window.mysms = {};
         
         var normalMatrix = new THREE.Matrix3().getNormalMatrix(intersects[0].object.matrixWorld);
         var worldNormal = intersects[0].face.normal.clone().applyMatrix3(normalMatrix).normalize();
-        cameraEndPos.add(worldNormal);
+        cameraEndPos.add(worldNormal.multiplyScalar(1.6));
         
         cameraAnimating = true;
       }
