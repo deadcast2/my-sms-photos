@@ -12,7 +12,7 @@ window.mysms = {};
     var meshes = [];
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(
-      75, window.innerWidth / window.innerHeight, 0.1, 1000
+      75, window.innerWidth / window.innerHeight, 0.1, 10000
     );
     var moveLeft = false, moveRight = false;
     var moveForward = false, moveBackward = false;
@@ -20,6 +20,17 @@ window.mysms = {};
     var renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
+    
+    var spaceboxMaterials = [];
+    for(var i = 0; i < 6; i++) {
+      spaceboxMaterials.push(new THREE.MeshBasicMaterial({
+        side: THREE.BackSide,
+        map: new THREE.TextureLoader().load('/assets/spacebox/slice' + i + '.png')
+      }));
+    }
+    var skyMaterial = new THREE.MeshFaceMaterial(spaceboxMaterials);
+    var spacebox = new THREE.Mesh(new THREE.CubeGeometry(5000, 5000, 5000), skyMaterial);
+    scene.add(spacebox);
   
     var photos = document.querySelectorAll('[data-photo-url]');
     for(var i = 0; i < photos.length; i++) {
@@ -156,13 +167,6 @@ window.mysms = {};
         var normalMatrix = new THREE.Matrix3().getNormalMatrix(intersects[0].object.matrixWorld);
         var worldNormal = intersects[0].face.normal.clone().applyMatrix3(normalMatrix).normalize();
         cameraEndPos.add(worldNormal);
-        
-        var planeDirToCamera = camera.position.clone().sub(intersects[0].object.position);
-        var angle = worldNormal.dot(planeDirToCamera.normalize());
-        
-        if(angle < 0) {
-          console.log("behind pic");
-        }
         
         cameraAnimating = true;
       }
