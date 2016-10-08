@@ -181,7 +181,7 @@ window.mysms = {};
     if (window.DeviceOrientationEvent) {
       window.addEventListener("deviceorientation", function () {
         camera.rotation.set(
-          event.beta * (Math.PI/180) - (90 * (Math.PI/180)), 
+          event.beta * (Math.PI/180), 
           event.alpha * (Math.PI/180), 
           event.gamma * (Math.PI/180)
         );
